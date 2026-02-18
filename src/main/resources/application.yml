@@ -1,0 +1,25 @@
+## 서버설정
+server:
+  port: 9090
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://222.239.249.197:5432/my_db
+    username: postgres
+    password: ehdduf922
+
+  jpa:
+    generate-ddl: false   # DDL 자동 생성 비활성화
+    open-in-view: false
+    show-sql: true   # SQL 쿼리 로그 출력
+    hibernate:
+      ddl-auto: none   # 테이블 자동 생성/수정 비활성화
+    properties:
+      hibernate:
+        format_sql: true
