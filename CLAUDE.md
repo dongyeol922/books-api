@@ -46,3 +46,30 @@ Spring Boot 레이어드 아키텍처 기반:
 - `reviews.rating`: 1~5 범위 CHECK 제약
 - `books.price`, `books.sale_price`: 양수 CHECK 제약
 - 스키마 변경 시 `script/bookstore_init.sql`을 직접 수정 (JPA DDL auto=none)
+
+## 개발 정책 
+- DTO 와 Entity 분리 사용
+- Request 또는 Response 데이터는 DTO 사용 
+- DTO는 생산성을 위해서  Inner class 사용하여 생성 
+- controller, service , repository 는 패키지 분리 
+- service 와 repository는 상속 구조 사용하지 않고  구현 
+- 응답은 공통의 Response 객체를 만들어서 사용
+- 응답은 정상일때와 Error 일때 객체를 분리해서 사용 
+
+### 응답 객체 양식(정상)
+```
+{
+   "code" : 200,
+   "date" : "2026-02-20 20:10",
+   "content" {...data}
+}
+```
+
+### 응답 객체 양식(에러)
+```
+{
+   "code" : 500,
+   "date" : "2026-02-20 20:10",
+   "message" : error 메시지
+}
+```
