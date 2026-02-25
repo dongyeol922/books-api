@@ -63,6 +63,9 @@ public class BookService {
 
         PageRequest pageable = PageRequest.of(searchDTO.getPage(), searchDTO.getSize());
 
+        long total = (title == null)
+                ? bookRepository.countByCategoryCategoryId(category.getCategoryId())
+                : bookRepository.countByCategoryAndTitle(category.getCategoryId(), title);
 
         List<BookListDto.BookItem> books = (title == null)
                 ? bookRepository.findByCategoryCategoryId(category.getCategoryId(), pageable)
@@ -70,7 +73,7 @@ public class BookService {
                 : bookRepository.findByCategoryAndTitle(category.getCategoryId(), title, pageable)
                         .stream().map(BookListDto.BookItem::from).toList();
 
-        return new BookListDto.BookListResponse(category.getCategoryName(), books);
+        return new BookListDto.BookListResponse(category.getCategoryName(), books, searchDTO.getPage(), total);
     }
 
     public BookListDto.BookListResponse getBooksByMenu(BookMenuDto.BookSearchDTO searchDTO) {
@@ -88,13 +91,17 @@ public class BookService {
         if (TAG_NEW.equals(types) || TAG_BESTSELLER.equals(types)) {
             String tagId = TAG_NEW.equals(types) ? TAG_NEW : TAG_BESTSELLER;
 
+            long total = (title == null)
+                    ? bookRepository.countByTagId(tagId)
+                    : bookRepository.countByTagAndTitle(tagId, title);
+
             List<BookListDto.BookItem> books = (title == null)
                     ? bookRepository.findTop5ByTagId(tagId, pageable)
                             .stream().map(BookListDto.BookItem::from).toList()
                     : bookRepository.findByTagAndTitle(tagId, title, pageable)
                             .stream().map(BookListDto.BookItem::from).toList();
 
-            return new BookListDto.BookListResponse(types, books);
+            return new BookListDto.BookListResponse(types, books, searchDTO.getPage(), total);
         }
 
         // 그 외 (IT, NOVEL, ESSAY 등) → 카테고리 기반 조회 (기존 로직 재사용)

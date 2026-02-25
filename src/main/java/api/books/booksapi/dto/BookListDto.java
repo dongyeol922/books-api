@@ -48,10 +48,14 @@ public class BookListDto {
     public static class BookListResponse {
         private final String category;
         private final List<BookItem> books;
+        private final int page;
+        private final long total;
 
-        public BookListResponse(String category, List<BookItem> books) {
+        public BookListResponse(String category, List<BookItem> books, int page, long total) {
             this.category = category;
             this.books = books;
+            this.page = page;
+            this.total = total;
         }
     }
 }

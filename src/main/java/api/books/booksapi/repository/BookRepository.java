@@ -29,4 +29,19 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByTagAndTitle(@Param("tagId") String tagId,
                                  @Param("title") String title,
                                  Pageable pageable);
+
+    @Query("SELECT COUNT(b) FROM Book b JOIN b.bookTags bt WHERE bt.tag.tagId = :tagId")
+    long countByTagId(@Param("tagId") String tagId);
+
+    long countByCategoryCategoryId(String categoryId);
+
+    @Query("SELECT COUNT(b) FROM Book b WHERE b.category.categoryId = :categoryId " +
+           "AND LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))")
+    long countByCategoryAndTitle(@Param("categoryId") String categoryId,
+                                 @Param("title") String title);
+
+    @Query("SELECT COUNT(b) FROM Book b JOIN b.bookTags bt WHERE bt.tag.tagId = :tagId " +
+           "AND LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%'))")
+    long countByTagAndTitle(@Param("tagId") String tagId,
+                            @Param("title") String title);
 }
